@@ -3,7 +3,7 @@ class Database {
     private $host = "localhost";
     private $user = "root";
     private $pass = "";
-    private $dbname = "db_peminjamanbuku";
+    private $dbname = "db_peminjamanbuku2";
     public $conn;
 
     public function getConnection() {
@@ -11,8 +11,8 @@ class Database {
         try {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->dbname, $this->user, $this->pass);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $e) {
-            echo "Connection Error: " . $e->getMessage();
+        } catch(PDOException $exception) {
+            echo "Connection error: " . $exception->getMessage();
         }
         return $this->conn;
     }

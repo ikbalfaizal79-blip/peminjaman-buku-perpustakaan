@@ -1,6 +1,5 @@
 <?php
-require_once 'config/Database.php';
-require_once 'models/User.php';
+require_once 'models/UserModel.php';
 
 class AuthController {
     private $db;
@@ -9,85 +8,107 @@ class AuthController {
     public function __construct() {
         $database = new Database();
         $this->db = $database->getConnection();
-        $this->userModel = new User($this->db);
+        $this->userModel = new UserModel($this->db);
     }
 
-    // Menampilkan halaman login dan memproses submit form login
+    // 1. Menampilkan Halaman Login
+    public function showLogin() {
+        // Jika user sudah dalam kondisi login, langsung alihkan sesuai role
+        if (isset($_SESSION['user'])) {
+            $this->redirectByUserRole($_SESSION['user']['role']);
+            return;
+        }
+        require_once 'views/auth/login.php';
+    }
+
+    // 2. Memproses Aksi Login
     public function login() {
-        $error = null;
-        
+        $email    = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = trim($_POST['email'] ?? '');
-            $password = trim($_POST['password'] ?? '');
-
-            if (!empty($email) && !empty($password)) {
-                $user = $this->userModel->login($email, $password);
-
-                if ($user) {
-                    // Simpan data user ke Session
-                    $_SESSION['user'] = [
-                        'id' => $user['id'],
-                        'nama' => $user['nama'],
-                        'email' => $user['email'],
-                        'role' => $user['role']
-                    ];
-
-                    // Redirect berdasarkan role
-                    if ($user['role'] === 'admin') {
-                        header("Location: index.php?action=admin_dashboard");
-                    } else {
-                        header("Location: index.php?action=siswa_dashboard");
-                    }
-                    exit();
-                } else {
-                    $error = "Email atau Password salah!";
-                }
-            } else {
-                $error = "Semua kolom wajib diisi!";
-            }
+        if (empty($email) || empty($password)) {
+            $error = "Email dan password wajib diisi!";
+            require_once 'views/auth/login.php';
+            return;
         }
 
-        // Tampilkan View Login
-        $viewFile = 'views/auth/login.php';
-        require_once 'views/layout.php';
+        $user = $this->userModel->login($email, $password);
+
+        if ($user) {
+            // Simpan data identitas user ke session
+            $_SESSION['user'] = [
+                'id_user' => $user['id_user'],
+                'nama'    => $user['nama'],
+                'email'   => $user['email'],
+                'role'    => $user['role']
+            ];
+
+            // Redirect ke halaman dashboard sesuai role
+            $this->redirectByUserRole($user['role']);
+        } else {
+            $error = "Email atau password salah!";
+            require_once 'views/auth/login.php';
+        }
     }
 
-    // Menampilkan halaman registrasi siswa dan memproses pendaftaran
+    // 3. Menampilkan Halaman Register (Daftar Siswa)
+    public function showRegister() {
+        if (isset($_SESSION['user'])) {
+            $this->redirectByUserRole($_SESSION['user']['role']);
+            return;
+        }
+        require_once 'views/auth/register.php';
+    }
+
+    // 4. Memproses Registrasi Siswa Baru
     public function register() {
-        $error = null;
-        $success = null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $nama     = trim($_POST['nama'] ?? '');
+        $email    = trim($_POST['email'] ?? '');
+        $nis      = trim($_POST['nis'] ?? '');
+        $kelas    = trim($_POST['kelas'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+        $role     = 'siswa'; // Default role registrasi mandiri adalah siswa
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nama = trim($_POST['nama'] ?? '');
-            $email = trim($_POST['email'] ?? '');
-            $password = trim($_POST['password'] ?? '');
+        if (!empty($nama) && !empty($email) && !empty($password)) {
+            // Mendaftarkan user dengan parameter NIS dan Kelas
+            $success = $this->userModel->register($nama, $email, $password, $role, $nis, $kelas);
 
-            if (!empty($nama) && !empty($email) && !empty($password)) {
-                // Default role pendaftaran publik adalah 'siswa'
-                $created = $this->userModel->create($nama, $email, $password, 'siswa');
-
-                if ($created) {
-                    header("Location: index.php?action=login&registered=1");
-                    exit();
-                } else {
-                    $error = "Gagal mendaftar. Email mungkin sudah digunakan.";
-                }
+            if ($success) {
+                header('Location: index.php?page=login&msg=registrasi_berhasil');
+                exit;
             } else {
-                $error = "Semua kolom wajib diisi!";
+                $error = "Registrasi gagal, email mungkin sudah digunakan.";
             }
         }
+    }
+    require_once 'views/auth/register.php';
+}
 
-        // Tampilkan View Register
-        $viewFile = 'views/auth/register.php';
-        require_once 'views/layout.php';
+    // 5. Memproses Logout
+    public function logout() {
+        $_SESSION = array();
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+
+        session_destroy();
+        header('Location: index.php?page=login');
+        exit;
     }
 
-    // Memproses Logout
-    public function logout() {
-        unset($_SESSION['user']);
-        session_destroy();
-        header("Location: index.php?action=login");
-        exit();
+    // Helper Fungsi Redirect Berdasarkan Role
+    private function redirectByUserRole($role) {
+        if ($role === 'admin') {
+            header('Location: index.php?page=admin&action=dashboard');
+        } else {
+            header('Location: index.php?page=siswa&action=dashboard');
+        }
+        exit;
     }
 }

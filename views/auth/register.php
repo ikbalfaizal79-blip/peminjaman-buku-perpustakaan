@@ -1,66 +1,115 @@
-<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
-    <div style="background-color: #232326; border-radius: 20px; padding: 35px; width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center;">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun - Perpustakaan</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .register-card {
+            background-color: #242424;
+            padding: 30px;
+            border-radius: 20px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+        .user-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        .input-box {
+            background-color: #7d7d7d;
+            border: none;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            outline: none;
+            font-size: 14px;
+        }
+        .input-box::placeholder {
+            color: #d1d1d1;
+        }
+        .btn-submit {
+            background-color: #4a4a4a;
+            color: white;
+            border: 1px solid #7d7d7d;
+            padding: 10px 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #666666;
+        }
+        .links {
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        .links a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .alert-error {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<?php include 'views/layout/header.php'; ?>
+
+<div class="card" style="max-width: 400px; margin: 50px auto; padding: 30px; text-align: center;">
+    <div style="font-size: 40px; margin-bottom: 10px;">📖</div>
+    <h2 style="margin-bottom: 20px;">Daftar Akun Siswa</h2>
+
+    <?php if (isset($error)): ?>
+        <p style="color: #e74c3c; font-size: 14px;"><?= htmlspecialchars($error); ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="index.php?page=register">
+        <input type="text" name="nama" placeholder="Nama Lengkap" class="input-dark" required style="width: 100%; margin-bottom: 15px; padding: 10px; box-sizing: border-box;">
         
-        <!-- User Icon Header -->
-        <div style="margin-bottom: 10px;">
-            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#cccccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-        </div>
+        <input type="email" name="email" placeholder="Email" class="input-dark" required style="width: 100%; margin-bottom: 15px; padding: 10px; box-sizing: border-box;">
+        
+        <input type="text" name="nis" placeholder="NIS (Nomor Induk Siswa)" class="input-dark" required style="width: 100%; margin-bottom: 15px; padding: 10px; box-sizing: border-box;">
+        
+        <input type="text" name="kelas" placeholder="Kelas (contoh: XI RPL 1)" class="input-dark" required style="width: 100%; margin-bottom: 15px; padding: 10px; box-sizing: border-box;">
+        
+        <input type="password" name="password" placeholder="Password" class="input-dark" required style="width: 100%; margin-bottom: 20px; padding: 10px; box-sizing: border-box;">
 
-        <h2 style="color: #ffffff; margin-top: 0; margin-bottom: 25px; font-weight: 700; letter-spacing: 1px;">REGISTRASI</h2>
+        <button type="submit" class="btn btn-blue" style="width: 100%; padding: 10px; border-radius: 20px;">DAFTAR</button>
+    </form>
 
-        <?php if (!empty($error)): ?>
-            <div style="background-color: #721c24; color: #f8d7da; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px;">
-                <?= htmlspecialchars($error) ?>
-            </div>
-        <?php endif; ?>
-
-        <form action="index.php?action=register" method="POST" style="text-align: left;">
-            <div style="margin-bottom: 15px;">
-                <input type="text" name="nama" placeholder="Nama Lengkap" required 
-                       style="width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background-color: #aeaeae; color: #111; font-size: 15px; box-sizing: border-box; outline: none;">
-            </div>
-
-            <div style="margin-bottom: 15px;">
-                <input type="email" name="email" placeholder="Email" required 
-                       style="width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background-color: #aeaeae; color: #111; font-size: 15px; box-sizing: border-box; outline: none;">
-            </div>
-
-            <div style="margin-bottom: 8px; position: relative;">
-                <input type="password" id="reg_password" name="password" placeholder="Password" required 
-                       style="width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background-color: #aeaeae; color: #111; font-size: 15px; box-sizing: border-box; outline: none;">
-                
-                <!-- Icon Toggle Password View -->
-                <span onclick="togglePassword()" style="position: absolute; right: 15px; top: 14px; cursor: pointer; color: #333;">
-                    <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                        <line x1="1" y1="1" x2="23" y2="23"></line>
-                    </svg>
-                </span>
-            </div>
-
-            <div style="text-align: right; margin-bottom: 25px;">
-                <a href="index.php?action=login" style="color: #3897f0; text-decoration: none; font-size: 13px; font-weight: 600;">Sudah punya akun</a>
-            </div>
-
-            <div style="text-align: center;">
-                <button type="submit" style="background-color: #55555d; color: #ffffff; border: 2px solid #6c6c75; padding: 12px 35px; border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; letter-spacing: 1px;">
-                    REGISTRASI
-                </button>
-            </div>
-        </form>
-    </div>
+    <p style="margin-top: 20px; font-size: 14px; color: #aaa;">
+        Sudah punya akun? <a href="index.php?page=login" style="color: #3498db; text-decoration: none;">Login di sini</a>
+    </p>
 </div>
 
-<script>
-function togglePassword() {
-    const pwdInput = document.getElementById('reg_password');
-    if (pwdInput.type === 'password') {
-        pwdInput.type = 'text';
-    } else {
-        pwdInput.type = 'password';
-    }
-}
-</script>
+<?php include 'views/layout/footer.php'; ?>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<!-- Header Bar Admin -->
+<div class="header-bar">
+    <div>Hallo <?= htmlspecialchars($_SESSION['user']['nama']); ?> (admin)</div>
+    <div>
+        <a href="index.php?page=admin&action=dashboard" class="btn btn-blue" style="margin-right: 5px;">Dashboard</a>
+        <a href="index.php?page=admin&action=kelolaBuku" class="btn btn-blue" style="margin-right: 5px;">Kelola Buku</a>
+        <!-- Tombol Kelola Kategori Tambahan -->
+        <a href="index.php?page=admin&action=kelolaKategori" class="btn btn-blue" style="margin-right: 5px; background-color: #2980b9;">Kelola Kategori</a>
+        <a href="index.php?page=logout" class="btn btn-red">Logout</a>
+    </div>
+</div>
