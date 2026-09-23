@@ -32,6 +32,7 @@
         cursor: pointer;
     }
     .close-btn:hover { color: #fff; }
+    
     .badge-count {
         background-color: #7d7d7d;
         color: #fff;
@@ -40,17 +41,29 @@
         font-size: 12px;
         float: right;
     }
+
+    /* Styling Tombol Aksi Tabel */
     .btn-action {
         padding: 5px 15px;
         border-radius: 15px;
         text-decoration: none;
         color: white;
         font-size: 13px;
-        margin-right: 5px;
         cursor: pointer;
+        display: inline-block;
+        text-align: center;
     }
-    .btn-edit { background-color: #555; border: none; }
-    .btn-delete { background-color: transparent; border: none; cursor: pointer; color: #fff; font-size: 16px; }
+    .btn-edit { 
+        background-color: #3498db; 
+        border: none; 
+        margin-right: 5px; 
+    }
+    .btn-delete { 
+        background-color: #e74c3c; 
+        border: none; 
+        cursor: pointer; 
+        color: #fff; 
+    }
 
     /* Styling Sidebar */
     .sidebar-menu {
@@ -118,9 +131,14 @@
 
     <!-- Tabel Data Kategori -->
     <div class="card" style="flex: 3; box-sizing: border-box;">
-        <div style="margin-bottom: 20px;">
-            <span class="badge-count">Total Kategori<br><strong style="font-size: 16px;"><?= count($kategoriList); ?></strong></span>
-            <h3 style="margin: 0; font-size: 18px;">kelola kategori</h3>
+        <!-- Header Bagian Kartu (Judul & Tombol Tambah di Kanan Atas) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h3 style="margin: 0; font-size: 18px; text-transform: capitalize;">Kelola Kategori</h3>
+            </div>
+            <div>
+                <a href="#" onclick="openModalTambah()" class="btn btn-blue" style="border-radius: 15px; font-size: 13px; padding: 6px 15px; text-decoration: none;">+ Tambah Kategori</a>
+            </div>
         </div>
 
         <div class="table-container">
@@ -134,7 +152,7 @@
                             </td>
                             <td style="padding: 12px 10px; text-align: right;">
                                 <button type="button" class="btn-action btn-edit" onclick="openModalEdit(<?= $k['id_kategori']; ?>, '<?= htmlspecialchars($k['nama_kategori'], ENT_QUOTES); ?>')">Edit</button>
-                                <a href="index.php?page=admin&action=hapusKategori&id=<?= $k['id_kategori']; ?>" class="btn-delete" onclick="return confirm('Hapus kategori ini? Buku yang terhubung mungkin akan kehilangan referensi kategori.');">🗑️</a>
+                                <a href="index.php?page=admin&action=hapusKategori&id=<?= $k['id_kategori']; ?>" class="btn-action btn-delete" onclick="return confirm('Hapus kategori ini? Buku yang terhubung mungkin akan kehilangan referensi kategori.');">Hapus</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -145,11 +163,6 @@
                     <?php endif; ?>
                 </tbody>
             </table>
-        </div>
-
-        <!-- Tombol Tambah Kategori -->
-        <div style="margin-top: 20px;">
-            <a href="#" onclick="openModalTambah()" style="color: #3498db; text-decoration: none; font-size: 14px; font-weight: bold;">+ Tambah Kategori</a>
         </div>
     </div>
 </div>

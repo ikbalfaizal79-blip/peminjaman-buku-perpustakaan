@@ -49,8 +49,8 @@
         margin-right: 5px;
         cursor: pointer;
     }
-    .btn-edit { background-color: #555; border: none; }
-    .btn-delete { background-color: transparent; border: none; cursor: pointer; color: #fff; font-size: 16px; }
+    .btn-edit { background-color: #3498db; border: none; }
+    .btn-delete { background-color: #e74c3c; border: none; cursor: pointer; color: #fff; padding: 5px 12px; border-radius: 15px; font-size: 13px; }
 
     /* Styling khusus untuk merapikan Sidebar */
     .sidebar-menu {
@@ -118,9 +118,14 @@
 
     <!-- Tabel Data User -->
     <div class="card" style="flex: 3; box-sizing: border-box;">
-        <div style="margin-bottom: 20px;">
-            <span class="badge-count">Total User<br><strong style="font-size: 16px;"><?= count($userList); ?></strong></span>
-            <h3 style="margin: 0; font-size: 18px;">kelola user</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h3 style="margin: 0; font-size: 18px; text-transform: capitalize;">Kelola User</h3>
+            </div>
+            <!-- Tombol Tambah User di Kanan Atas -->
+            <div>
+                <a href="#" onclick="openAddModal()" class="btn btn-blue" style="border-radius: 15px; font-size: 13px; padding: 6px 15px; text-decoration: none;">+ Tambah User</a>
+            </div>
         </div>
 
         <div class="table-container">
@@ -144,7 +149,7 @@
                             </td>
                             <td style="padding: 12px 10px; text-align: right;">
                                 <button type="button" class="btn-action btn-edit" onclick='openEditModal(<?= json_encode($u); ?>)'>Edit</button>
-                                <a href="index.php?page=admin&action=hapusUser&id=<?= $u['id_user']; ?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus user ini?');">🗑️</a>
+                                <a href="index.php?page=admin&action=hapusUser&id=<?= $u['id_user']; ?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus user ini?');">Hapus</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -155,11 +160,6 @@
                     <?php endif; ?>
                 </tbody>
             </table>
-        </div>
-
-        <!-- Tombol Tambah User -->
-        <div style="margin-top: 20px;">
-            <a href="#" onclick="openAddModal()" style="color: #3498db; text-decoration: none; font-size: 14px; font-weight: bold;">+ Tambah User</a>
         </div>
     </div>
 </div>
