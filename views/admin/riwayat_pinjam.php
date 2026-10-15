@@ -121,6 +121,25 @@
         font-weight: bold; 
     }
 
+    /* Penyelarasan Tinggi, Lebar, dan Bentuk Elemen Header agar Simetris */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-actions .theme-toggle-btn, 
+    .header-actions input[type="text"], 
+    .header-actions .btn-red {
+        height: 38px;
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        margin: 0;
+    }
+
     .input-dark, input[type="text"] {
         background-color: var(--input-bg);
         border: 1px solid var(--input-border);
@@ -128,31 +147,18 @@
         padding: 0 12px;
         border-radius: 6px;
         outline: none;
-        box-sizing: border-box;
+        width: 180px;
     }
     .input-dark:focus, input[type="text"]:focus {
         border-color: #80bdff;
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
 
-    /* Penyelarasan Tinggi & Tampilan Elemen Header */
-    .header-bar .theme-toggle-btn, 
-    .header-bar input[type="text"], 
-    .header-bar .btn-red {
-        height: 38px;
-        box-sizing: border-box;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        vertical-align: middle;
-    }
-
     .btn-red {
         background-color: #dc3545;
         color: white;
         border: none;
-        padding: 0 14px;
+        padding: 0 16px;
         border-radius: 6px;
         text-decoration: none;
         font-weight: bold;
@@ -182,14 +188,15 @@
 <!-- Header Bar -->
 <div class="header-bar">
     <div style="font-weight: 500; color: var(--text-main);">Hallo <?= htmlspecialchars($_SESSION['user']['nama']); ?> (admin)</div>
-    <div style="display: flex; align-items: center; gap: 12px;">
-        <!-- Tombol Ganti Tema -->
+    
+    <!-- Grup Tombol & Input yang Disamakan Tingginya & Dirapikan -->
+    <div class="header-actions">
         <button id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">🌙 Dark Mode</button>
 
         <form method="GET" action="index.php" style="display: inline-flex; margin: 0;">
             <input type="hidden" name="page" value="admin">
             <input type="hidden" name="action" value="riwayatPinjam">
-            <input type="text" name="search" placeholder="Telusuri..." value="<?= htmlspecialchars($_GET['search'] ?? ''); ?>" class="input-dark" style="width: 180px;">
+            <input type="text" name="search" placeholder="Telusuri..." value="<?= htmlspecialchars($_GET['search'] ?? ''); ?>" class="input-dark">
         </form>
         
         <a href="index.php?page=logout" class="btn-red">Logout</a>
