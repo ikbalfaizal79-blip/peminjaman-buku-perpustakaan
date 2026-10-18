@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 17 Sep 2026 pada 03.15
+-- Waktu pembuatan: 18 Okt 2026 pada 16.05
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE TABLE `buku` (
 --
 
 INSERT INTO `buku` (`id_buku`, `nama_buku`, `id_kategori`, `stok`, `gambar`) VALUES
-(1, 'Risa Saraswati', 1, 25, '1789605544_6aab36a83e6d0.jpeg'),
+(1, 'Risa Saraswati', 1, 50, '1789605544_6aab36a83e6d0.jpeg'),
 (2, 'Matematika XII', 2, 130, '1789605371_6aab35fb5a234.png'),
 (3, 'Si Kancil', 3, 25, '1787992637_6a929a3d94012.png'),
 (5, 'Bahasa indonesia XII', 2, 493, '1789605109_6aab34f56ca3d.png');
@@ -81,7 +81,7 @@ CREATE TABLE `peminjaman` (
   `tanggal_kembali_rencana` date DEFAULT NULL,
   `tanggal_dikembalikan` date DEFAULT NULL,
   `tgl_kembali` date NOT NULL,
-  `status` enum('menunggu','dipinjam','selesai','ditolak') DEFAULT 'menunggu',
+  `status` enum('Dipinjam','Menunggu Pengembalian','Dikembalikan','Ditolak') DEFAULT 'Dipinjam',
   `denda` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -90,21 +90,21 @@ CREATE TABLE `peminjaman` (
 --
 
 INSERT INTO `peminjaman` (`id_pinjam`, `id_user`, `id_buku`, `jumlah`, `tgl_pinjam`, `tanggal_kembali_rencana`, `tanggal_dikembalikan`, `tgl_kembali`, `status`, `denda`) VALUES
-(1, 3, 3, 4, '2026-08-28', NULL, NULL, '2026-08-29', 'selesai', 0),
-(2, 3, 2, 1, '2026-08-28', NULL, NULL, '2026-08-29', 'selesai', 0),
-(3, 3, 1, 2, '2026-08-28', NULL, NULL, '2026-08-29', 'selesai', 0),
-(4, 3, 2, 3, '2026-08-29', NULL, NULL, '2026-08-30', 'ditolak', 0),
-(5, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-30', 'selesai', 0),
-(6, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-22', 'ditolak', 0),
-(7, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-30', 'selesai', 0),
-(8, 3, 3, 1, '2026-08-30', NULL, NULL, '2026-08-31', 'selesai', 0),
-(9, 3, 5, 1, '2026-08-31', NULL, NULL, '2026-09-02', 'selesai', 0),
-(10, 3, 5, 7, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 120000),
-(11, 3, 1, 7, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 0),
-(12, 3, 2, 50, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 10000),
-(13, 9, 3, 18, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 0),
-(15, 10, 3, 2, '2026-09-14', NULL, NULL, '2026-09-24', 'selesai', 0),
-(16, 11, 1, 25, '2026-09-17', NULL, NULL, '2026-09-18', 'dipinjam', 0);
+(1, 3, 3, 4, '2026-08-28', NULL, NULL, '2026-08-29', '', 0),
+(2, 3, 2, 1, '2026-08-28', NULL, NULL, '2026-08-29', '', 0),
+(3, 3, 1, 2, '2026-08-28', NULL, NULL, '2026-08-29', '', 0),
+(4, 3, 2, 3, '2026-08-29', NULL, NULL, '2026-08-30', 'Ditolak', 0),
+(5, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-30', '', 0),
+(6, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-22', 'Ditolak', 0),
+(7, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-30', '', 0),
+(8, 3, 3, 1, '2026-08-30', NULL, NULL, '2026-08-31', '', 0),
+(9, 3, 5, 1, '2026-08-31', NULL, NULL, '2026-09-02', '', 0),
+(10, 3, 5, 7, '2026-09-04', NULL, NULL, '2026-09-05', '', 120000),
+(11, 3, 1, 7, '2026-09-04', NULL, NULL, '2026-09-05', '', 0),
+(12, 3, 2, 50, '2026-09-04', NULL, NULL, '2026-09-05', '', 10000),
+(13, 9, 3, 18, '2026-09-04', NULL, NULL, '2026-09-05', '', 0),
+(15, 10, 3, 2, '2026-09-14', NULL, NULL, '2026-09-24', '', 0),
+(16, 11, 1, 25, '2026-09-17', NULL, NULL, '2026-09-18', '', 0);
 
 -- --------------------------------------------------------
 
@@ -132,10 +132,10 @@ INSERT INTO `user` (`id_user`, `nama`, `email`, `nis`, `kelas`, `password`, `rol
 (3, 'jainal', 'jain@gmail.com', '873434', 'xi br 4', '$2y$10$QaQx0m/KYFmuVEbaVFV1GO5/Zz90DkwdUg/wY4V83lvSJ6J8BOtIG', 'siswa'),
 (4, 'ibaladmin', 'ibal@gmail.com', NULL, NULL, '$2y$10$iLuthBzQ/YN0wa7ADTp2Q.hTBw4SbYfkmzq4Gkoyzoup6cjKPruXu', 'admin'),
 (5, 'albani', 'albani@gmail.com', '813845724', 'xii ips 3', '$2y$10$rdQjPzsE7R5VfW3NE4lauunyRzOB6CYBYg4UbeZPwryAwFciZXleK', 'siswa'),
-(6, 'adminbuku', 'adminbku@gmail.com', NULL, NULL, '$2y$10$XkQnWznl2sCI8ySB1SLT.uVwO3LmVPDVp06Z0O9o9DMN/bn8mcxz2', 'admin'),
+(6, 'adminbuku', 'admin@gmail.com', '', '', '$2y$10$tHFnnZe.Q/QEAYcLES2F6O8wFQBs7T2uMxNGH2xDTVSv/ZhwZtoKO', 'admin'),
 (7, 'noordin', 'noordin@gmail.com', '29449414', 'xi rpl 4', '$2y$10$HS9I8VgLqvNGJOhHgdK/EuNt4HwgUcv5GV3UoPxuxcPhe4xndj07i', 'siswa'),
 (9, 'samsudin', 'samsudin@gmail.com', '92383838', 'xi br 3', '$2y$10$hWwrkTAp/gaOd4N2MY25quNAqYDOG98XNnPLurFnfkvHaKO2n24DO', 'siswa'),
-(10, 'nayla', 'nayla@gmail.com', '832592599', 'XII RPL 4', '$2y$10$wTHnyc0GCE.2/mrKTWHcnOSQGiBSx/fnUylgEa/2GJPdqmNM4NWhu', 'siswa'),
+(10, 'peminjam', 'peminjam@gmail.com', '832592599', 'XII RPL 4', '$2y$10$xCKTj1Y0nakAA8Gs.xn6qu65b912B1JO70fI98ugBesfOR2goIQJK', 'siswa'),
 (11, 'aswan123', 'aswan@gmail.com', '12976416', 'XII RPL 7', '$2y$10$S8Xe/7heYW/C0KssnL2ZQuJfDKANMjZ0Oc36/5OWObNdCbdHoyFBG', 'siswa');
 
 --
