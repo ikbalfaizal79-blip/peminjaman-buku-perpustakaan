@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 19 Okt 2026 pada 05.41
+-- Waktu pembuatan: 05 Nov 2026 pada 15.44
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `buku1`
+-- Database: `db_pembuku`
 --
 
 -- --------------------------------------------------------
@@ -40,10 +40,11 @@ CREATE TABLE `buku` (
 --
 
 INSERT INTO `buku` (`id_buku`, `nama_buku`, `id_kategori`, `stok`, `gambar`) VALUES
-(1, 'Risa Saraswati', 1, 25, '1789605544_6aab36a83e6d0.jpeg'),
-(2, 'Matematika XII', 2, 130, '1789605371_6aab35fb5a234.png'),
-(3, 'Si Kancil', 3, 25, '1787992637_6a929a3d94012.png'),
-(5, 'Bahasa indonesia XII', 2, 493, '1789605109_6aab34f56ca3d.png');
+(1, 'Jurnal Risa', 1, 57, '1793871629_6aec4f0da9c6a.jpeg'),
+(2, 'Matematik XII', 2, 50, '1793863254_6aec2e56585d1.webp'),
+(3, 'Si Kancil', 3, 45, '1787992637_6a929a3d94012.png'),
+(5, 'Bahasa indonesia XII', 2, 489, '1793871370_6aec4e0a997ac.png'),
+(6, 'Sejakala', 1, 95, '1793872188_6aec513c0d505.png');
 
 -- --------------------------------------------------------
 
@@ -98,14 +99,9 @@ INSERT INTO `peminjaman` (`id_pinjam`, `id_user`, `id_buku`, `jumlah`, `tgl_pinj
 (6, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-22', 'ditolak', 0),
 (7, 3, 3, 1, '2026-08-29', NULL, NULL, '2026-08-30', 'selesai', 0),
 (8, 3, 3, 1, '2026-08-30', NULL, NULL, '2026-08-31', 'selesai', 0),
-(9, 3, 5, 1, '2026-08-31', NULL, NULL, '2026-09-02', 'selesai', 0),
-(10, 3, 5, 7, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 120000),
-(11, 3, 1, 7, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 0),
-(12, 3, 2, 50, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 10000),
-(13, 9, 3, 18, '2026-09-04', NULL, NULL, '2026-09-05', 'selesai', 0),
-(15, 10, 3, 2, '2026-09-14', NULL, NULL, '2026-09-24', 'selesai', 0),
-(16, 11, 1, 25, '2026-09-17', NULL, NULL, '2026-09-18', 'dipinjam', 0),
-(17, 11, 5, 100, '2026-10-19', NULL, NULL, '2026-10-20', 'menunggu', 0);
+(9, 3, 5, 1, '2026-08-31', NULL, NULL, '2026-09-02', 'selesai', 560000),
+(10, 5, 5, 10, '2026-10-28', NULL, NULL, '2026-10-29', 'selesai', 0),
+(11, 4, 6, 5, '2026-11-05', NULL, NULL, '2026-11-06', 'selesai', 0);
 
 -- --------------------------------------------------------
 
@@ -118,7 +114,7 @@ CREATE TABLE `user` (
   `nama` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `nis` varchar(20) DEFAULT NULL,
-  `kelas` varchar(50) DEFAULT NULL,
+  `kelas` varchar(20) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('admin','siswa') NOT NULL DEFAULT 'siswa'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -128,16 +124,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nama`, `email`, `nis`, `kelas`, `password`, `role`) VALUES
-(1, 'Agus', 'admin@perpus.com', '82424567', 'xii rpl 4', '$2y$10$LkjCZstRvRErj9Rb/NEbk.IcDSiUMMkAflJ1BqeTffXfjqM0V6.KS', 'siswa'),
-(2, 'Rahul', 'rahul@gmail.com', '865321', 'xii rpl 4', '$2y$10$pec5wLkyoK9tT.g.G024euFnyJoghbcI31KCjauz/szy7TnEtOb4i', 'siswa'),
-(3, 'jainal', 'jain@gmail.com', '873434', 'xi br 4', '$2y$10$QaQx0m/KYFmuVEbaVFV1GO5/Zz90DkwdUg/wY4V83lvSJ6J8BOtIG', 'siswa'),
-(4, 'ibaladmin', 'ibal@gmail.com', NULL, NULL, '$2y$10$iLuthBzQ/YN0wa7ADTp2Q.hTBw4SbYfkmzq4Gkoyzoup6cjKPruXu', 'admin'),
-(5, 'albani', 'albani@gmail.com', '813845724', 'xii ips 3', '$2y$10$rdQjPzsE7R5VfW3NE4lauunyRzOB6CYBYg4UbeZPwryAwFciZXleK', 'siswa'),
-(6, 'admin', 'admin@gmail.com', '', '', '$2y$10$x0scl72CB1LLfkXrIVakiOb/tXjdI2/kfGALONEiY0Nmgn4feIj1S', 'admin'),
-(7, 'noordin', 'noordin@gmail.com', '29449414', 'xi rpl 4', '$2y$10$HS9I8VgLqvNGJOhHgdK/EuNt4HwgUcv5GV3UoPxuxcPhe4xndj07i', 'siswa'),
-(9, 'samsudin', 'samsudin@gmail.com', '92383838', 'xi br 3', '$2y$10$hWwrkTAp/gaOd4N2MY25quNAqYDOG98XNnPLurFnfkvHaKO2n24DO', 'siswa'),
-(10, 'peminjam', 'peminjam@gmail.com', '832592599', 'XII RPL 4', '$2y$10$D6suaYY8mO9aatqAUCd02uoK8CoHS72Y5O5ETKJP3lzlfOIy/Xoiy', 'siswa'),
-(11, 'aswan123', 'aswan@gmail.com', '12976416', 'XII RPL 7', '$2y$10$S8Xe/7heYW/C0KssnL2ZQuJfDKANMjZ0Oc36/5OWObNdCbdHoyFBG', 'siswa');
+(2, 'Rahul', 'rahul@gmail.com', '42456224', 'XII RPL 4', '$2y$10$Ap.iZyUgqFEtpMFqey7FkuL2pcG0gZCklRzfXM2479NdWYYLOUV5K', 'siswa'),
+(3, 'jainal', 'jainal@gmail.com', '29875985739', 'XII RPL 4', '$2y$10$ytpS5kisCQwme8SWpx90n.PoPeKezGWyPvYAXkwngrdSc.kdyb6Zq', 'siswa'),
+(4, 'peminjam', 'peminjam@gmail.com', '29875985739', 'XII RPL 4', '$2y$10$.JUIzVzuK/7oMCUw1cQkqehWMbmnvxj4JpOh5LJVc9P8.Zn34jRFK', 'siswa'),
+(5, 'albani', 'albani@gmail.com', '27642698', 'XII RPL 7', '$2y$10$OJe9pjfb2KyjHBweZdoVweHPe6zBy2D5NNp5V8aVmbqjSkqPXIvCW', 'siswa'),
+(6, 'admin', 'admin@gmail.com', '', '', '$2y$10$1xP2gFOPpsJggLqzinv68u/jZ0C7bVKpXM48Xu9p2/dJBe6n1lrn6', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -179,7 +170,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT untuk tabel `buku`
 --
 ALTER TABLE `buku`
-  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `kategori`
@@ -191,13 +182,13 @@ ALTER TABLE `kategori`
 -- AUTO_INCREMENT untuk tabel `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
