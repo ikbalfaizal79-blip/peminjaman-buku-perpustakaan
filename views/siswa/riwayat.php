@@ -153,6 +153,7 @@
                     <th style="padding: 10px;">Buku</th>
                     <th style="padding: 10px;">Jumlah</th>
                     <th style="padding: 10px;">Tgl Pinjam</th>
+                    <th style="padding: 10px;">Tgl Kembali Rencana</th>
                     <th style="padding: 10px;">Tgl Kembali</th>
                     <th style="padding: 10px; text-align: center;">Status</th>
                     <th style="padding: 10px;">Denda</th>
@@ -196,6 +197,9 @@
                         <td style="padding: 12px 10px; color: var(--text-muted);"><?= !empty($r['tgl_pinjam']) ? date('d-m-Y', strtotime($r['tgl_pinjam'])) : '-'; ?></td>
                         <td style="padding: 12px 10px; color: var(--text-muted); font-size: 13px;">
     <?= !empty($r['tanggal_kembali_rencana']) ? date('d-m-Y', strtotime($r['tanggal_kembali_rencana'])) : '-'; ?>
+</td>
+<td style="padding: 12px 10px; color: var(--text-muted); font-size: 13px;">
+    <?= !empty($r['tanggal_dikembalikan']) ? date('d-m-Y', strtotime($r['tanggal_dikembalikan'])) : '-'; ?>
 </td>
                         <td style="padding: 12px 10px; text-align: center;">
                             <span class="status-badge status-<?= strtolower($r['status']); ?>">
