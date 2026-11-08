@@ -163,34 +163,40 @@
                 <?php if (!empty($riwayatList)): ?>
                     <?php foreach ($riwayatList as $r): ?>
                     <?php
-                        // Logika Penghitungan Denda
-                        $denda_tampil = 0;
-                        $ket_denda = '';
+    // Logika Penghitungan Denda
+    $denda_tampil = 0;
+    $ket_denda = '';
 
-                        // Jika status masih dipinjam, hitung denda berjalan secara realtime
-                        if ($r['status'] === 'dipinjam' && !empty($r['tgl_kembali'])) {
-                            $tgl_kembali = new DateTime($r['tgl_kembali']);
-                            $tgl_sekarang = new DateTime(date('Y-m-d')); // Tanggal hari ini tanpa jam
+    // Jika status masih dipinjam, hitung denda berjalan secara realtime
+    // Diubah menggunakan tanggal_kembali_rencana
+    if ($r['status'] === 'dipinjam' && !empty($r['tanggal_kembali_rencana'])) {
+        $tgl_kembali = new DateTime($r['tanggal_kembali_rencana']);
+        $tgl_sekarang = new DateTime(date('Y-m-d')); // Tanggal hari ini tanpa jam
 
-                            if ($tgl_sekarang > $tgl_kembali) {
-                                $selisih = $tgl_sekarang->diff($tgl_kembali);
-                                $hari_terlambat = $selisih->days;
-                                $denda_tampil = $hari_terlambat * 10000;
-                                $ket_denda = 'Terlambat ' . $hari_terlambat . ' hari';
-                            }
-                        } else {
-                            // Jika sudah selesai/dikembalikan, ambil nilai denda dari database
-                            $denda_tampil = $r['denda'] ?? 0;
-                            if ($denda_tampil > 0) {
-                                $ket_denda = 'Denda Final';
-                            }
-                        }
-                    ?>
+        if ($tgl_sekarang > $tgl_kembali) {
+            $selisih = $tgl_sekarang->diff($tgl_kembali);
+            $hari_terlambat = $selisih->days;
+            
+            // Memperbaiki operator perkalian (*) yang sebelumnya terpotong
+            $denda_tampil = $hari_terlambat * 10000;
+            
+            $ket_denda = 'Terlambat ' . $hari_terlambat . ' hari';
+        }
+    } else {
+        // Jika sudah selesai/dikembalikan, ambil nilai denda dari database
+        $denda_tampil = $r['denda'] ?? 0;
+        if ($denda_tampil > 0) {
+            $ket_denda = 'Denda Final';
+        }
+    }
+?>
                     <tr style="border-bottom: 1px solid var(--table-border);">
                         <td style="padding: 12px 10px; font-weight: bold; color: var(--text-main);"><?= htmlspecialchars($r['nama_buku']); ?></td>
                         <td style="padding: 12px 10px; color: var(--text-main);"><?= $r['jumlah']; ?></td>
                         <td style="padding: 12px 10px; color: var(--text-muted);"><?= !empty($r['tgl_pinjam']) ? date('d-m-Y', strtotime($r['tgl_pinjam'])) : '-'; ?></td>
-                        <td style="padding: 12px 10px; color: var(--text-muted);"><?= !empty($r['tgl_kembali']) ? date('d-m-Y', strtotime($r['tgl_kembali'])) : '-'; ?></td>
+                        <td style="padding: 12px 10px; color: var(--text-muted); font-size: 13px;">
+    <?= !empty($r['tanggal_kembali_rencana']) ? date('d-m-Y', strtotime($r['tanggal_kembali_rencana'])) : '-'; ?>
+</td>
                         <td style="padding: 12px 10px; text-align: center;">
                             <span class="status-badge status-<?= strtolower($r['status']); ?>">
                                 <?= htmlspecialchars($r['status']); ?>

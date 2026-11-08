@@ -84,12 +84,9 @@ public function dashboard() {
     // 6. Kelola Buku (Daftar Buku & Form Tambah)
     public function kelolaBuku() {
         $search = $_GET['search'] ?? '';
-        $bukuList = $this->bukuModel->getAllBuku($search);
-
-        // Ambil data kategori untuk dropdown select
-        $stmt = $this->db->query("SELECT * FROM kategori");
-        $kategoriList = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        // Pastikan memanggil method model dengan membawa parameter $search
+        $bukuList = $this->bukuModel->getAllBuku($search); 
+        $kategoriList = $this->kategoriModel->getAllKategori();
         require_once 'views/admin/kelola_buku.php';
     }
 
@@ -135,7 +132,8 @@ public function dashboard() {
 
     // 9. Kelola User (Daftar User & Form Tambah)
     public function kelolaUser() {
-        $userList = $this->userModel->getAllUsers();
+        $search = $_GET['search'] ?? '';
+        $userList = $this->userModel->getAllUsers($search); // Pastikan menerima parameter $search
         require_once 'views/admin/kelola_user.php';
     }
 

@@ -46,7 +46,6 @@
         --badge-count-text: #ffffff;
     }
 
-    /* Styling Dasar Menggunakan Variabel */
     body {
         background-color: var(--bg-body);
         color: var(--text-main);
@@ -87,16 +86,6 @@
     }
     .close-btn:hover { color: var(--text-heading); }
     
-    .badge-count {
-        background-color: var(--badge-count-bg);
-        color: var(--badge-count-text);
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 12px;
-        float: right;
-    }
-
-    /* Kartu / Container */
     .card {
         background-color: var(--bg-card);
         border: 1px solid var(--border-color);
@@ -104,7 +93,6 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
-    /* Input & Select */
     .input-dark, input[type="text"], input[type="email"], input[type="password"], select {
         background-color: var(--input-bg);
         border: 1px solid var(--input-border);
@@ -121,7 +109,6 @@
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
 
-    /* Tombol Utama */
     .btn-blue {
         background-color: #007bff;
         color: white;
@@ -142,7 +129,6 @@
         color: white;
     }
 
-    /* Styling Tombol Aksi Tabel */
     .btn-action {
         padding: 5px 15px;
         border-radius: 4px;
@@ -174,7 +160,6 @@
     }
     .btn-delete:hover { background-color: #c82333; }
 
-    /* Styling Sidebar */
     .sidebar-menu {
         display: flex;
         flex-direction: column;
@@ -206,7 +191,6 @@
         font-weight: bold;
     }
 
-    /* Tombol Switch Tema */
     .theme-toggle-btn {
         background-color: var(--sidebar-bg);
         color: var(--text-main);
@@ -227,18 +211,16 @@
 <div class="header-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--bg-header); border-bottom: 1px solid var(--border-color); margin-bottom: 20px;">
     <div style="font-weight: 500; color: var(--text-main);">Hallo <?= htmlspecialchars($_SESSION['user']['nama']); ?> (admin)</div>
     <div style="display: flex; align-items: center; gap: 10px;">
-        <!-- Tombol Ganti Tema -->
         <button id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">🌙 Dark Mode</button>
 
+        <!-- Form Telusur yang Diperbaiki -->
         <form method="GET" action="index.php" style="display:inline;">
             <input type="hidden" name="page" value="admin">
-            <input type="hidden" name="action" value="<?= $_GET['action'] ?? 'dashboard'; ?>">
-            <input type="text" name="search" placeholder="Telusuri" value="<?= htmlspecialchars($_GET['search'] ?? ''); ?>" class="input-dark" style="width:150px; margin-bottom:0;">
+            <input type="hidden" name="action" value="kelolaUser">
+            <input type="text" name="search" placeholder="Telusuri..." value="<?= htmlspecialchars($_GET['search'] ?? ''); ?>" class="input-dark" style="width:150px; margin-bottom:0;">
         </form>
         
-        <!-- Tombol Riwayat Peminjaman -->
         <a href="index.php?page=admin&action=riwayatPinjam" class="btn btn-blue" style="border-radius: 15px; font-size: 13px; padding: 6px 12px; text-decoration: none;">📋 Riwayat</a>
-        
         <a href="index.php?page=logout" class="btn btn-red" style="padding: 6px 12px; border-radius: 4px; font-size: 13px;">Logout</a>
     </div>
 </div>
@@ -265,7 +247,6 @@
             <div>
                 <h3 style="margin: 0; font-size: 18px; text-transform: capitalize; color: var(--text-heading);">Kelola User</h3>
             </div>
-            <!-- Tombol Tambah User di Kanan Atas -->
             <div>
                 <a href="#" onclick="openAddModal()" class="btn btn-blue" style="border-radius: 15px; font-size: 13px; padding: 6px 15px; text-decoration: none;">+ Tambah User</a>
             </div>
@@ -279,16 +260,16 @@
                         <tr style="border-bottom: 1px solid var(--table-border);">
                             <td style="padding: 12px 10px; font-weight: bold; width: 25%; color: var(--text-heading);">
                                 <?= htmlspecialchars($u['nama']); ?>
-                                <?php if (!empty($u['kelas'])): ?>
+                                <?php if (!empty($u['kelas']) && $u['role'] === 'siswa'): ?>
                                     <br><small style="color: var(--text-muted); font-weight: normal;"><?= htmlspecialchars($u['kelas']); ?></small>
                                 <?php endif; ?>
                             </td>
                             <td style="padding: 12px 10px; color: var(--input-text); font-size: 14px;">
                                 <?= htmlspecialchars($u['email']); ?>
-                                <?php if (!empty($u['nis'])): ?>
+                                <?php if (!empty($u['nis']) && $u['role'] === 'siswa'): ?>
                                     | <span style="color: #007bff; font-weight: 500;">NIS: <?= htmlspecialchars($u['nis']); ?></span>
                                 <?php endif; ?>
-                                <span style="font-size: 12px; color: var(--text-muted);">\(<?= htmlspecialchars($u['role']); ?>\)</span>
+                                <span style="font-size: 12px; color: var(--text-muted);">(<?= htmlspecialchars($u['role']); ?>)</span>
                             </td>
                             <td style="padding: 12px 10px; text-align: right;">
                                 <button type="button" class="btn-action btn-edit" onclick='openEditModal(<?= json_encode($u); ?>)'>Edit</button>
@@ -317,11 +298,16 @@
         <form method="POST" action="index.php?page=admin&action=tambahUser">
             <input type="text" name="nama" placeholder="Nama" class="input-dark" required>
             <input type="email" name="email" placeholder="Email" class="input-dark" required>
-            <input type="text" name="nis" placeholder="NIS (Khusus Siswa)" class="input-dark">
-            <input type="text" name="kelas" placeholder="Kelas (Khusus Siswa)" class="input-dark">
+            
+            <!-- Wrapper NIS & Kelas agar mudah disembunyikan/ditampilkan -->
+            <div id="groupTambahSiswa">
+                <input type="text" name="nis" placeholder="NIS" class="input-dark">
+                <input type="text" name="kelas" placeholder="Kelas" class="input-dark">
+            </div>
+
             <input type="password" name="password" placeholder="Password" class="input-dark" required>
             
-            <select name="role" class="input-dark" required>
+            <select name="role" id="tambah_role" class="input-dark" onchange="toggleFormSiswa('tambah')" required>
                 <option value="siswa" selected>Siswa</option>
                 <option value="admin">Admin</option>
             </select>
@@ -343,11 +329,16 @@
             
             <input type="text" name="nama" id="edit_nama" placeholder="Nama" class="input-dark" required>
             <input type="email" name="email" id="edit_email" placeholder="Email" class="input-dark" required>
-            <input type="text" name="nis" id="edit_nis" placeholder="NIS" class="input-dark">
-            <input type="text" name="kelas" id="edit_kelas" placeholder="Kelas" class="input-dark">
+            
+            <!-- Wrapper NIS & Kelas Edit -->
+            <div id="groupEditSiswa">
+                <input type="text" name="nis" id="edit_nis" placeholder="NIS" class="input-dark">
+                <input type="text" name="kelas" id="edit_kelas" placeholder="Kelas" class="input-dark">
+            </div>
+
             <input type="password" name="password" placeholder="Kosongkan jika tak diubah" class="input-dark">
             
-            <select name="role" id="edit_role" class="input-dark" required>
+            <select name="role" id="edit_role" class="input-dark" onchange="toggleFormSiswa('edit')" required>
                 <option value="siswa">Siswa</option>
                 <option value="admin">Admin</option>
             </select>
@@ -361,14 +352,12 @@
     const htmlElement = document.documentElement;
     const themeToggleBtn = document.getElementById('themeToggle');
 
-    // Cek LocalStorage saat halaman dimuat
     const savedTheme = localStorage.getItem('theme') || 'light';
     if (savedTheme === 'dark') {
         htmlElement.setAttribute('data-theme', 'dark');
         themeToggleBtn.textContent = '☀️ Light Mode';
     }
 
-    // Fungsi untuk mengganti tema
     function toggleTheme() {
         const currentTheme = htmlElement.getAttribute('data-theme');
         if (currentTheme === 'dark') {
@@ -382,8 +371,24 @@
         }
     }
 
+    // Fungsi Logika Sembunyikan/Tampilkan NIS & Kelas Berdasarkan Role
+    function toggleFormSiswa(mode) {
+        let roleSelect = document.getElementById(mode === 'tambah' ? 'tambah_role' : 'edit_role');
+        let groupDiv = document.getElementById(mode === 'tambah' ? 'groupTambahSiswa' : 'groupEditSiswa');
+
+        if (roleSelect.value === 'admin') {
+            groupDiv.style.display = 'none';
+            // Kosongkan nilai input agar tidak ikut terkirim ke database saat admin dipilih
+            groupDiv.querySelectorAll('input').forEach(input => input.value = '');
+        } else {
+            groupDiv.style.display = 'block';
+        }
+    }
+
     function openAddModal() {
         document.getElementById('modalTambahUser').style.display = 'flex';
+        document.getElementById('tambah_role').value = 'siswa';
+        toggleFormSiswa('tambah'); // Set default awal
     }
     function closeAddModal() {
         document.getElementById('modalTambahUser').style.display = 'none';
@@ -396,6 +401,10 @@
         document.getElementById('edit_nis').value = user.nis ?? '';
         document.getElementById('edit_kelas').value = user.kelas ?? '';
         document.getElementById('edit_role').value = user.role;
+        
+        // Panggil fungsi toggle saat modal edit dibuka agar sesuai dengan role user tersebut
+        toggleFormSiswa('edit');
+        
         document.getElementById('modalEditUser').style.display = 'flex';
     }
     function closeEditModal() {

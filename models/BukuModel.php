@@ -10,26 +10,27 @@ class BukuModel {
     // Mengambil Semua Data Buku
     public function getAllBuku($search = '') {
         $query = "SELECT b.*, k.nama_kategori 
-                  FROM " . $this->table . " b 
+                  FROM buku b 
                   LEFT JOIN kategori k ON b.id_kategori = k.id_kategori";
-
+        
         if (!empty($search)) {
-            $query .= " WHERE b.nama_buku LIKE :search OR k.nama_kategori LIKE :search";
+            // Pencarian mencakup nama buku, nama kategori, dan jumlah stok
+            $query .= " WHERE b.nama_buku LIKE :search 
+                        OR k.nama_kategori LIKE :search 
+                        OR b.stok LIKE :search";
         }
-
+        
         $query .= " ORDER BY b.id_buku DESC";
 
         $stmt = $this->conn->prepare($query);
-
         if (!empty($search)) {
             $searchTerm = "%{$search}%";
             $stmt->bindParam(':search', $searchTerm);
         }
-
         $stmt->execute();
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
     // Mengambil Detail Buku Berdasarkan ID
     public function getBukuById($id_buku) {
         $query = "SELECT b.*, k.nama_kategori 

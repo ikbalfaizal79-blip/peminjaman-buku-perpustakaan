@@ -219,24 +219,24 @@
                     <?php if (!empty($activePinjaman)): ?>
                         <?php foreach ($activePinjaman as $p): ?>
                         <?php
-                            $hari_terlambat = 0;
-                            $estimasi_denda = 0;
+    $hari_terlambat = 0;
+    $estimasi_denda = 0;
 
-                            if (!empty($p['tgl_kembali'])) {
-                                $tgl_kembali = new DateTime($p['tgl_kembali']);
-                                $tgl_sekarang = new DateTime(date('Y-m-d'));
+    if (!empty($p['tanggal_kembali_rencana'])) {
+        $tgl_kembali = new DateTime($p['tanggal_kembali_rencana']);
+        $tgl_sekarang = new DateTime(date('Y-m-d'));
 
-                                if ($tgl_sekarang > $tgl_kembali) {
-                                    $selisih = $tgl_sekarang->diff($tgl_kembali);
-                                    $hari_terlambat = $selisih->days;
-                                    $estimasi_denda = $hari_terlambat * 10000;
-                                }
-                            }
-                        ?>
+        if ($tgl_sekarang > $tgl_kembali) {
+            $selisih = $tgl_sekarang->diff($tgl_kembali);
+            $hari_terlambat = $selisih->days;
+            $estimasi_denda = $hari_terlambat * 10000;
+        }
+    }
+?>
                         <tr style="border-bottom: 1px solid var(--table-border);">
                             <td style="padding: 12px 10px; font-weight: bold; color: var(--text-heading);"><?= htmlspecialchars($p['nama_siswa']); ?></td>
                             <td style="padding: 12px 10px; color: var(--text-main);"><?= htmlspecialchars($p['nama_buku']); ?></td>
-                            <td style="padding: 12px 10px; color: var(--text-muted);"><?= !empty($p['tgl_kembali']) ? date('d-m-Y', strtotime($p['tgl_kembali'])) : '-'; ?></td>
+                            <td style="padding: 12px 10px; color: var(--text-muted);"><?= !empty($p['tanggal_kembali_rencana']) ? date('d-m-Y', strtotime($p['tanggal_kembali_rencana'])) : '-'; ?></td>
                             <td style="padding: 12px 10px;">
                                 <?php if ($hari_terlambat > 0): ?>
                                     <span style="color: #dc3545; font-weight: bold;"><?= $hari_terlambat; ?> Hari</span>
@@ -265,6 +265,7 @@
             </table>
         </div>
     </div>
+    
 </div>
 
 <script>

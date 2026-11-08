@@ -45,13 +45,30 @@ class UserModel {
     }
 
     // 3. Mengambil Semua Data User (Ditambah nis dan kelas)
-    public function getAllUsers() {
-        $query = "SELECT id_user, nama, email, nis, kelas, role FROM " . $this->table . " ORDER BY id_user DESC";
+    public function getAllUsers($search = '') {
+        $query = "SELECT * FROM user";
+        
+        if (!empty($search)) {
+            // Ditambahkan pencarian untuk kolom nis, kelas, dan role
+            $query .= " WHERE nama LIKE :search 
+                        OR email LIKE :search 
+                        OR nis LIKE :search 
+                        OR kelas LIKE :search 
+                        OR role LIKE :search";
+        }
+        
+        $query .= " ORDER BY id_user DESC";
+
         $stmt = $this->conn->prepare($query);
+        if (!empty($search)) {
+            $searchTerm = "%{$search}%";
+            $stmt->bindParam(':search', $searchTerm);
+        }
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     // 4. Mengambil Detail User berdasarkan ID (Ditambah nis dan kelas)
     public function getUserById($id_user) {

@@ -210,6 +210,7 @@
                         <th style="padding: 10px;">Peminjam</th>
                         <th style="padding: 10px;">Alat / Buku</th>
                         <th style="padding: 10px;">Jumlah</th>
+                        <th style="padding: 10px;">Rencana Kembali</th> <!-- Kolom Baru -->
                         <th style="padding: 10px; text-align: right;">Aksi</th>
                     </tr>
                 </thead>
@@ -220,6 +221,9 @@
                             <td style="padding: 12px 10px; font-weight: bold; color: var(--text-heading);"><?= htmlspecialchars($p['nama_siswa']); ?></td>
                             <td style="padding: 12px 10px; color: var(--text-main);"><?= htmlspecialchars($p['nama_buku']); ?></td>
                             <td style="padding: 12px 10px; color: var(--text-main);"><?= $p['jumlah']; ?></td>
+                            <td style="padding: 12px 10px; color: var(--text-main);">
+    <?= !empty($p['tanggal_kembali_rencana']) ? date('d-m-Y', strtotime($p['tanggal_kembali_rencana'])) : '-'; ?>
+</td>
                             <td style="padding: 12px 10px; text-align: right;">
                                 <a href="index.php?page=admin&action=setujuiPinjaman&id=<?= $p['id_pinjam']; ?>" class="btn-action btn-approve" onclick="return confirm('Setujui peminjaman ini?');">Setujui</a>
                                 <a href="index.php?page=admin&action=tolakPinjaman&id=<?= $p['id_pinjam']; ?>" class="btn-action btn-reject" onclick="return confirm('Tolak peminjaman ini?');">Tolak</a>
@@ -228,7 +232,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 25px;">Tidak ada pengajuan peminjaman yang menunggu persetujuan.</td>
+                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 25px;">Tidak ada pengajuan peminjaman yang menunggu persetujuan.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

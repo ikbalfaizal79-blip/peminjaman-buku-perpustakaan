@@ -253,8 +253,8 @@
                                 <?= !empty($r['tgl_pinjam']) ? date('d-m-Y', strtotime($r['tgl_pinjam'])) : '-'; ?>
                             </td>
                             <td style="padding: 12px 10px; color: var(--text-muted); font-size: 13px;">
-                                <?= !empty($r['tgl_kembali']) ? date('d-m-Y', strtotime($r['tgl_kembali'])) : '-'; ?>
-                            </td>
+    <?= !empty($r['tanggal_dikembalikan']) ? date('d-m-Y', strtotime($r['tanggal_dikembalikan'])) : '-'; ?>
+</td>
                             <td style="padding: 12px 10px; font-weight: bold; color: <?= ($r['denda'] > 0) ? '#dc3545' : 'var(--text-muted)'; ?>;">
                                 Rp <?= number_format($r['denda'] ?? 0, 0, ',', '.'); ?>
                             </td>
